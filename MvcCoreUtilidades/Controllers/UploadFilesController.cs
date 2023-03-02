@@ -24,9 +24,7 @@ namespace MvcCoreUtilidades.Controllers
         {
             
             string fileName = fichero.FileName;
-            //NUESTRA RUTA SERA UNA COMBINACION DE LOS DOS
-            //LAS RUTAS SIEMPRE SE ESCRIBEN CON Path.Combine
-            //QUE SE ADAPTA A CADA SERVER CORE
+           
             string path = this.helperPath.MapPath(fileName, Folders.Uploads);
             using(Stream stream = new FileStream(path, FileMode.Create))
             {

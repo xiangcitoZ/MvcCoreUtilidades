@@ -7,7 +7,7 @@
 
         private IWebHostEnvironment hostEnvironment;
 
-        private HelperPathProvider(IWebHostEnvironment hostEnvironment) 
+        public HelperPathProvider(IWebHostEnvironment hostEnvironment) 
         { 
             this.hostEnvironment = hostEnvironment;
         
