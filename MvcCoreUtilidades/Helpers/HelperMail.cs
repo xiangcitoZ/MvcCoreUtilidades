@@ -15,7 +15,7 @@ namespace MvcCoreUtilidades.Helpers
         private MailMessage ConfigureMailMessage
             (string para, string asunto, string mensaje)
         {
-            MailMessage mailMessage = new MailMessage ();
+            MailMessage mailMessage = new MailMessage();
             string email =
                 this.configuration.GetValue<string>("MailSettings:Credentials:User");
             mailMessage.From = new MailAddress(email);
@@ -24,53 +24,67 @@ namespace MvcCoreUtilidades.Helpers
             mailMessage.Body = mensaje;
             mailMessage.IsBodyHtml = true;
             return mailMessage;
-
         }
 
-        private SmtpClient ConfigureSmtpCliente()
+        private SmtpClient ConfigureSmtpClient()
         {
             string user = this.configuration.GetValue<string>
-                ("MialSettings:Credentials:User");
+                ("MailSettings:Credentials:User");
             string password = this.configuration.GetValue<string>
-                ("MialSettings:Credentials:UPasswordser");
+                ("MailSettings:Credentials:Password");
             string host = this.configuration.GetValue<string>
-                ("MialSettings:Credentials:Host");
+                ("MailSettings:Smtp:Host");
             int port = this.configuration.GetValue<int>
-                ("MialSettings:Credentials:Port");
+                ("MailSettings:Smtp:Port");
             bool enableSSL = this.configuration.GetValue<bool>
-                ("MialSettings:Credentials:EnableSSL");
+                ("MailSettings:Smtp:EnableSSL");
             bool defaultCredentials = this.configuration.GetValue<bool>
-               ("MialSettings:Credentials:DefaultCredentials");
-
-            SmtpClient client = new SmtpClient ();
+                ("MailSettings:Smtp:DefaultCredentials");
+            SmtpClient client = new SmtpClient();
             client.Host = host;
             client.Port = port;
             client.EnableSsl = enableSSL;
             client.UseDefaultCredentials = defaultCredentials;
             NetworkCredential credentials =
-                new NetworkCredential (user, password);
+                new NetworkCredential(user, password);
             client.Credentials = credentials;
             return client;
         }
 
+        //NECESITAMOS UN METODO PARA ENVIAR UN MAIL
         public async Task
-           SendMailAsync(string para, string asunto, string mensaje)
+            SendMailAsync(string para, string asunto, string mensaje)
         {
-            MailMessage mail = this.ConfigureMailMessage(para, asunto, mensaje);    
-            SmtpClient client = this.ConfigureSmtpCliente();
+            MailMessage mail = this.ConfigureMailMessage(para, asunto, mensaje);
+            SmtpClient client = this.ConfigureSmtpClient();
             await client.SendMailAsync(mail);
         }
 
         public async Task
-          SendMailAsync(string para, string asunto, string mensaje
+            SendMailAsync(string para, string asunto, string mensaje
             , string filePath)
         {
             MailMessage mail = this.ConfigureMailMessage(para, asunto, mensaje);
             Attachment attachment = new Attachment(filePath);
             mail.Attachments.Add(attachment);
-            SmtpClient client = this.ConfigureSmtpCliente();
+            SmtpClient client = this.ConfigureSmtpClient();
+            await client.SendMailAsync(mail);
+        }
+
+        public async Task
+            SendMailAsync(string para, string asunto, string mensaje
+            , List<string> filesPath)
+        {
+            MailMessage mail = this.ConfigureMailMessage(para, asunto, mensaje);
+            foreach (string filePath in filesPath)
+            {
+                Attachment attachment = new Attachment(filePath);
+                mail.Attachments.Add(attachment);
+            }
+            SmtpClient client = this.ConfigureSmtpClient();
             await client.SendMailAsync(mail);
         }
     }
+
 }
 
