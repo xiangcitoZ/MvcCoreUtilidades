@@ -7,9 +7,7 @@
     <label>Contenido a cifrar</label>
     <input type="text" name="contenido" class="form-control"/>
     <label>Resultado: </label>
-    <textarea name="resultado" rows="5" class="form-control">
-        @ViewData["TEXTOCIFRADO"]
-    </textarea>
+    <textarea name="resultado" rows="5" class="form-control">@ViewData["TEXTOCIFRADO"]</textarea>
     <button class="btn btn-info" name="accion" value="cifrar">
         Cifrar contenido
     </button>
@@ -19,6 +17,6 @@
 
 </form>
 
-<h1 style="color:blue">
+<h1 style="color:blue ">
     @ViewData["MENSAJE"]
 </h1>
